@@ -40,6 +40,8 @@ namespace Wordle
             int korSzam = 0;
             Console.WriteLine(mostaniSzo + mostaniSzo.Length); // csak tesztelesre 
 
+            // kulon kerdezes metodus 
+
             for (int jatekosProba = 0; jatekosProba < 5;  jatekosProba++)
             {
                 string jatekosSzo = "";
