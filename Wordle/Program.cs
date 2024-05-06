@@ -38,40 +38,41 @@ namespace Wordle
 
             string mostaniSzo = UjSzo(szavak, r);
             int korSzam = 0;
-            Console.WriteLine(mostaniSzo + mostaniSzo.Length); // csak tesztelesre 
+            // Console.WriteLine(mostaniSzo, mostaniSzo.Length); // csak tesztelesre 
 
-            // kulon kerdezes metodus 
+            string jatekosSzo = "";
 
             for (int jatekosProba = 0; jatekosProba < 5;  jatekosProba++)
             {
-                string jatekosSzo = "";
-                while (jatekosSzo.Length != 5) // ha nem 5 karakter hosszu kerjen ujat
+                jatekosSzo = BekerUjSzo(jatekosSzo);
+                if (Ellenoriz(jatekosSzo, mostaniSzo) == "Eltalalt!")
                 {
-                    Console.Write("Tipp (5 karakter): ");
-                    string input = Console.ReadLine();
-                    Console.WriteLine("nem 5 karakter hosszu");
-                    jatekosSzo = input;
-                }
-                
-
-                if (Ellenoriz(jatekosSzo, mostaniSzo) != "Eltalalt!")
-                {
-                    // 
-                }
-                else
-                {
-                    Console.WriteLine($"{korSzam + 1}. kör nyert!");
+                    Console.WriteLine($"{korSzam + 1}. kör nyert!, // {jatekosProba} hiba eddig");
                     korSzam++;
                     mostaniSzo = UjSzo(szavak, r);
+                    jatekosProba = 0; // ha eltalalja megnoveli a korszamot, uj szavat ker, és 5 uj hiba lehetoseget kap
                 }
                 // Console.WriteLine(Ellenoriz(jatekosSzo, mostaniSzo));
             }
             Console.ReadKey();
         }
 
+        private static string BekerUjSzo(string jatekosSzo)
+        {
+            do
+            {
+                Console.Write("Tipp (5 karakter): ");
+                string input = Console.ReadLine();
+                if (input.Length != 5)
+                    Console.WriteLine("nem 5 karakter hosszu");
+                jatekosSzo = input;
+            } while (jatekosSzo.Length != 5);
+
+            return jatekosSzo;
+        }
+
         private static string UjSzo(string[] szavak, Random r)
         {
-            
             return szavak[r.Next(szavak.Length)];
         }
 
