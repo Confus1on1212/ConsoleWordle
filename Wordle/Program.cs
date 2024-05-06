@@ -19,13 +19,8 @@ namespace Wordle
             // pontozas: negyedjere - 2 pont
             // pontozas: otodjere - 1 pont
             // pontozas: nem talalja ki ennyi proba utan akkor 0 pont -> uj szo uj kor
-            // 3 kör
             // 3 kor utan kiirja az reszpontokat / kor + osszpontot , talan leaderboard
-            // meg kell nezni hogy 5 betus legyen a szo amit tippel
 
-            //Console.Write("Tipp: ");
-            //string jatekosSzo = Console.ReadLine();
-            //Console.WriteLine(Ellenoriz(jatekosSzo, mostaniSzo));
 
             string[] szavak = new string[]
             {
@@ -37,22 +32,30 @@ namespace Wordle
             };
 
             string mostaniSzo = UjSzo(szavak, r);
-            int korSzam = 0;
+            int korSzam = 1;
+            int pontSzam = 0;
             // Console.WriteLine(mostaniSzo, mostaniSzo.Length); // csak tesztelesre 
 
             string jatekosSzo = "";
 
-            for (int jatekosProba = 0; jatekosProba < 5;  jatekosProba++)
+            for (int jatekosProba = 0; jatekosProba < 5 && korSzam <= 3;  jatekosProba++)
             {
                 jatekosSzo = BekerUjSzo(jatekosSzo);
-                if (Ellenoriz(jatekosSzo, mostaniSzo) == "Eltalalt!")
+                if (EltalaltaE(jatekosSzo, mostaniSzo) == true)
                 {
-                    Console.WriteLine($"{korSzam + 1}. kör nyert!, // {jatekosProba} hiba eddig");
+                    pontSzam += 5 - jatekosProba;
+                    if (korSzam != 3)
+                        Console.WriteLine($"{korSzam}. kör nyert! // {jatekosProba} hiba a körben // {pontSzam} pont");
+                    else
+                    {
+                       Console.WriteLine($"{korSzam}. kör nyert! // {jatekosProba} hiba körben // {pontSzam} pont // meccs vege");
+                        // itt kell lementeni majd a leaderboardho a statot
+                    }
+
                     korSzam++;
                     mostaniSzo = UjSzo(szavak, r);
-                    jatekosProba = 0; // ha eltalalja megnoveli a korszamot, uj szavat ker, és 5 uj hiba lehetoseget kap
+                    jatekosProba = -1; // ha eltalalja megnoveli a korszamot, uj szót ker, és 5 uj hiba lehetoseget kap
                 }
-                // Console.WriteLine(Ellenoriz(jatekosSzo, mostaniSzo));
             }
             Console.ReadKey();
         }
@@ -76,7 +79,7 @@ namespace Wordle
             return szavak[r.Next(szavak.Length)];
         }
 
-        private static string Ellenoriz(string jatekosSzo, string mostaniSzo)
+        private static bool EltalaltaE(string jatekosSzo, string mostaniSzo) 
         {
             int betukJoHelyen = 0; // betuk ami jo helyen van (zold)
             int betukNemjoHelyen = 0; // betuk amik benne vannak a szoban de nem jo helyen (sarga)
@@ -87,8 +90,6 @@ namespace Wordle
                     betukJoHelyen++;
                     Console.WriteLine($"A(z) \"{jatekosSzo[i]}\" betű jó helyen van! ({i + 1}. karakter)");
                 }
-                if (betukJoHelyen == 5)
-                    return $"Eltalalt!";
 
                 for (int j = 0; j < jatekosSzo.Length; j++) 
                 {
@@ -100,7 +101,12 @@ namespace Wordle
                 }
             }
 
-            return $"{betukJoHelyen} darab betű van jó helyen és {betukNemjoHelyen} db betű van benne de nem jó helyen!";
+            Console.WriteLine($"{betukJoHelyen} darab betű van jó helyen és {betukNemjoHelyen} db betű van benne de nem jó helyen!");
+
+            if (betukJoHelyen == 5)
+                return true;
+            else
+                return false;
         }
     }
 }
