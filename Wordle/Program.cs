@@ -151,7 +151,7 @@ namespace Wordle
 
                         List<string> sorok = new List<string>();
                         sorok = File.ReadAllLines(eleresiUt).ToList();
-                        sorok.Add($"{pontSzam} Pont // //{DateTime.Now}"); // player neve kell majd ide !!!!!
+                        sorok.Add($"{pontSzam} Pont // [név] //{DateTime.Now}"); // player neve kell majd ide !!!!!
                         File.WriteAllLines(eleresiUt, sorok);
                     }
 
