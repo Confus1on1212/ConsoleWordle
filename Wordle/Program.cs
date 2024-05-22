@@ -55,19 +55,32 @@ namespace Wordle
         {
             Console.Clear();
             Elozmenyek();
-            Console.WriteLine("1. Vissza A Játékmenübe \t 2. Vissza A Főmenübe");
+            Console.WriteLine("1. Előzmények törlése \t 2. Vissza A Játékmenübe \t 3. Vissza A Főmenübe");
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.D1:
                 case ConsoleKey.NumPad1:
-                    JatekMenu();
+                    ElozmenyekTorlése();
+                    ElozmenyMenu();
                     break;
                 case ConsoleKey.D2:
                 case ConsoleKey.NumPad2:
-                    // Fomenu
+                    JatekMenu();
+                    break;
+                case ConsoleKey.D3:
+                case ConsoleKey.NumPad3:
+                    // fomenu
                     break;
                 default: ElozmenyMenu(); break;
             }
+        }
+
+        private static void ElozmenyekTorlése()
+        {
+            string eleresiUt = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Elozmenyek.csv";
+
+            File.Delete(eleresiUt);
+            File.Create(eleresiUt).Close();
         }
 
         private static void Elozmenyek()
@@ -152,7 +165,7 @@ namespace Wordle
 
                     else // ha az utolsó kör
                     {
-                        SaveScore(pontSzam);
+                        PontSzamMentese(pontSzam);
                         Console.WriteLine($"{korSzam}. kör nyert! // Nyomjon meg egy gombot a továbblépéshez");
                         Console.ReadKey();
                     }
@@ -173,7 +186,7 @@ namespace Wordle
             }
         }
 
-        private static void SaveScore(int pontSzam)
+        private static void PontSzamMentese(int pontSzam)
         {
             string eleresiUt = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Elozmenyek.csv";
 
