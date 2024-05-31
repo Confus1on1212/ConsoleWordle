@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
+using MainMenu;
 
 namespace Wordle
 {
@@ -26,7 +27,7 @@ namespace Wordle
             JatekMenu();
             Console.ReadKey();
         }
-        private static void JatekMenu()
+        public static void JatekMenu()
         {
             Console.Clear();
             Console.WriteLine("Főmenü");
@@ -45,7 +46,7 @@ namespace Wordle
                     break;
                 case ConsoleKey.D3:
                 case ConsoleKey.NumPad3:
-                    // FOmenu
+                    MainMenu.Program.Main();
                     break;
                 default: JatekMenu(); break;
             }
@@ -69,7 +70,7 @@ namespace Wordle
                     break;
                 case ConsoleKey.D3:
                 case ConsoleKey.NumPad3:
-                    // fomenu
+                    MainMenu.Program.Main();
                     break;
                 default: ElozmenyMenu(); break;
             }
@@ -77,7 +78,7 @@ namespace Wordle
 
         private static void ElozmenyekTorlése()
         {
-            string eleresiUt = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Elozmenyek.csv";
+            string eleresiUt = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\WordleElozmenyek.csv";
 
             File.Delete(eleresiUt);
             File.Create(eleresiUt).Close();
@@ -85,7 +86,7 @@ namespace Wordle
 
         private static void Elozmenyek()
         {
-            string eleresiUt = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Elozmenyek.csv";
+            string eleresiUt = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\WordleElozmenyek.csv";
 
             List<string> sorok = new List<string>();
             sorok = File.ReadAllLines(eleresiUt).ToList();
@@ -140,21 +141,20 @@ namespace Wordle
                 "levél",
                 "napok",
                 "nemes",
-                "olíva",
                 "repül",
             };
 
             string mostaniSzo = UjSzo(szavak, r);
             int korSzam = 1;
             int pontSzam = 0;
-            // Console.WriteLine(mostaniSzo, mostaniSzo.Length); // csak tesztelesre 
+            // Console.WriteLine(mostaniSzo); // csak tesztelesre 
 
             string jatekosSzo = "";
 
             for (int jatekosProba = 0; jatekosProba < 5 && korSzam <= 3; jatekosProba++)
             {
                 jatekosSzo = BekerUjSzo(jatekosSzo);
-                // Console.WriteLine(mostaniSzo, mostaniSzo.Length); // csak tesztelesre
+                // Console.WriteLine(mostaniSzo); // csak tesztelesre
                 if (EltalaltaE(jatekosSzo, mostaniSzo, 5 - jatekosProba) == true) // HA nyeri a kört
                 {
                     pontSzam += 5 - jatekosProba;
@@ -188,11 +188,11 @@ namespace Wordle
 
         private static void PontSzamMentese(int pontSzam)
         {
-            string eleresiUt = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\Elozmenyek.csv";
+            string eleresiUt = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\WordleElozmenyek.csv";
 
             List<string> sorok = new List<string>();
             sorok = File.ReadAllLines(eleresiUt).ToList();
-            sorok.Add($"Pont: {pontSzam};Név: [név];Idő: {DateTime.Now}"); // player neve kell majd ide !!!!!
+            sorok.Add($"Pont: {pontSzam};Név: {MainMenu.Program.bejelentkezettFelhasznalo.Felhasznalonev};Idő: {DateTime.Now}"); // player neve kell majd ide !!!!!
             File.WriteAllLines(eleresiUt, sorok);
         }
 
