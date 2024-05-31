@@ -13,7 +13,7 @@ namespace Wordle
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main2() // atnevezve hog ne legyen error
         {
 
             // pontozas: elsore - 5 pont
@@ -50,6 +50,7 @@ namespace Wordle
                     break;
                 default: JatekMenu(); break;
             }
+            Console.ReadKey();
         }
 
         private static void ElozmenyMenu()
@@ -155,18 +156,22 @@ namespace Wordle
             {
                 jatekosSzo = BekerUjSzo(jatekosSzo);
                 // Console.WriteLine(mostaniSzo); // csak tesztelesre
-                if (EltalaltaE(jatekosSzo, mostaniSzo, 5 - jatekosProba) == true) // HA nyeri a kört
+                if (EltalaltaE(jatekosSzo, mostaniSzo, 5 - jatekosProba) == true) // HA nyeri a kört // 5 - jatekosProba = hany proba maradt
                 {
                     pontSzam += 5 - jatekosProba;
                     if (korSzam != 3)
                     {
+                        Console.BackgroundColor = ConsoleColor.Green;  
                         Console.WriteLine($"{korSzam}. kör nyert! // {pontSzam} pont");
+                        Console.ResetColor();
                     }
 
                     else // ha az utolsó kör
                     {
                         PontSzamMentese(pontSzam);
+                        Console.BackgroundColor = ConsoleColor.Green;
                         Console.WriteLine($"{korSzam}. kör nyert! // Nyomjon meg egy gombot a továbblépéshez");
+                        Console.ResetColor();
                         Console.ReadKey();
                     }
                     korSzam++;
@@ -231,7 +236,6 @@ namespace Wordle
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"A(z) \"{jatekosSzo[i]}\" betű jó helyen van! ({i + 1}. karakter)");
                     Console.ResetColor();
-                    Console.WriteLine($"{probaMaradt - 1} esély van még");
                 }
 
                 for (int j = 0; j < jatekosSzo.Length; j++)
@@ -242,9 +246,9 @@ namespace Wordle
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine($"A(z) \"{jatekosSzo[i]}\" betű benne van de nem jó helyen van! ({i + 1}. karakter)");
                         Console.ResetColor();
-                        Console.WriteLine($"{probaMaradt - 1} esély van még");
                     }
                 }
+                Console.WriteLine($"{probaMaradt - 1} esély van még");
             }
 
             Console.WriteLine($"{betukJoHelyen} darab betű van jó helyen és {betukNemjoHelyen} db betű van benne de nem jó helyen!");
